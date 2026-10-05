@@ -1,0 +1,15 @@
+numpy>=1.24
+# 必须卡在 4.x：OpenCV 5.0 已经彻底移除了 CascadeClassifier（级联人脸检测），
+# 装上 5.x 会导致经典引擎不可用。
+opencv-python-headless>=4.8,<5
+fastapi>=0.110
+uvicorn[standard]>=0.27
+python-multipart>=0.0.9
+pillow>=10.0
+
+# ---- 可选：深度学习引擎 ----
+# pip install insightface==0.7.3
+# pip install onnxruntime            # GPU: onnxruntime-gpu
+#
+# 装上之后再下载 inswapper_128.onnx 放到 models/ 目录，
+# 并设置环境变量 INSWAPPER_MODEL 指向它。

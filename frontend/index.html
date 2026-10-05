@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FaceSwap Studio · AI 换脸工作台</title>
+<link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <div class="logo">FS</div>
+    <div>
+      <h1>FaceSwap Studio</h1>
+      <p class="sub">AI 换脸工作台 · 本地运行 · 图片不出本机</p>
+    </div>
+  </div>
+  <div class="engine-badge" id="engineBadge" title="当前使用的换脸引擎">
+    <span class="dot"></span><span id="engineName">检测引擎中…</span>
+  </div>
+</header>
+
+<main class="layout">
+
+  <!-- ================= 左：素材区 ================= -->
+  <section class="panel">
+    <h2 class="panel-title">1 · 上传素材</h2>
+
+    <div class="drop" id="dropSource" data-slot="source">
+      <input type="file" accept="image/*" hidden id="fileSource">
+      <img class="preview" id="prevSource" alt="">
+      <div class="drop-hint">
+        <strong>源脸</strong>
+        <span>提供五官的那张正脸照</span>
+      </div>
+      <button class="mini-btn" data-clear="source" type="button">清除</button>
+    </div>
+
+    <div class="drop" id="dropTarget" data-slot="target">
+      <input type="file" accept="image/*" hidden id="fileTarget">
+      <img class="preview" id="prevTarget" alt="">
+      <div class="drop-hint">
+        <strong>目标图</strong>
+        <span>要被替换的那张脸（可多人）</span>
+      </div>
+      <button class="mini-btn" data-clear="target" type="button">清除</button>
+    </div>
+
+    <div class="face-picker" id="facePicker" hidden>
+      <span class="picker-label">选择目标图中的第</span>
+      <div class="chips" id="faceChips"></div>
+      <span class="picker-label">张脸</span>
+    </div>
+  </section>
+
+  <!-- ================= 中：参数区 ================= -->
+  <section class="panel">
+    <h2 class="panel-title">2 · 调参数</h2>
+
+    <label class="field">
+      <span class="field-name">融合方式</span>
+      <select id="optBlend">
+        <option value="seamless">泊松融合（自然，推荐）</option>
+        <option value="feather">羽化贴图（快，边缘略生硬）</option>
+      </select>
+    </label>
+
+    <label class="field">
+      <span class="field-name">蒙版羽化 <b id="valFeather">45</b></span>
+      <input type="range" id="optFeather" min="0" max="100" value="45">
+    </label>
+
+    <label class="field">
+      <span class="field-name">蒙版范围 <b id="valScale">1.28</b></span>
+      <input type="range" id="optScale" min="60" max="200" value="128">
+    </label>
+
+    <label class="field">
+      <span class="field-name">整体强度 <b id="valStrength">100</b>%</span>
+      <input type="range" id="optStrength" min="0" max="100" value="100">
+    </label>
+
+    <label class="switch">
+      <input type="checkbox" id="optColor" checked>
+      <span>肤色自动匹配（强烈建议开启）</span>
+    </label>
+
+    <label class="switch">
+      <input type="checkbox" id="optEnhance">
+      <span>结果锐化增强</span>
+    </label>
+
+    <button class="primary" id="btnSwap" disabled>开始换脸</button>
+    <button class="ghost" id="btnDetect" disabled>只看人脸检测结果</button>
+
+    <p class="tip" id="status">上传两张图后即可开始。</p>
+  </section>
+
+  <!-- ================= 右：结果区 ================= -->
+  <section class="panel result-panel">
+    <h2 class="panel-title">3 · 看结果</h2>
+    <div class="canvas-wrap" id="canvasWrap">
+      <div class="empty" id="resultEmpty">
+        <div class="empty-icon">◎</div>
+        <p>结果会显示在这里</p>
+      </div>
+      <!-- 上下两层同尺寸叠加，上层用 clip-path 裁切实现前后对比 -->
+      <div class="stack" id="stack" hidden>
+        <img id="imgTarget" class="layer base" alt="原图">
+        <img id="resultImg" class="layer top" alt="换脸结果">
+        <div class="split-line" id="splitLine"></div>
+      </div>
+    </div>
+
+    <div class="compare-row" id="compareRow" hidden>
+      <span>对比</span>
+      <input type="range" id="compareRange" min="0" max="100" value="100">
+    </div>
+
+    <div class="meta" id="meta" hidden></div>
+
+    <div class="actions">
+      <button class="ghost" id="btnDownload" disabled>下载结果</button>
+      <button class="ghost danger" id="btnReset" disabled>重新开始</button>
+    </div>
+  </section>
+</main>
+
+<!-- ================= 历史 ================= -->
+<section class="history" id="historySection" hidden>
+  <h2 class="panel-title">历史记录</h2>
+  <div class="gallery" id="gallery"></div>
+</section>
+
+<footer class="foot">
+  <p>本工具仅用于合法、经本人同意的娱乐与技术研究用途。请勿用于伪造他人身份、传播虚假信息或其他侵权场景。</p>
+</footer>
+
+<script src="/app.js"></script>
+</body>
+</html>

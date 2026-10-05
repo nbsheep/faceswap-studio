@@ -1,0 +1,23 @@
+# ===== 模型权重（体积大，按 README 自行下载）=====
+models/
+*.onnx
+*.npy
+
+# ===== 人脸样例 & 生成结果（隐私 + 运行时产物）=====
+pic/
+outputs/
+uploads/
+
+# ===== Python =====
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# ===== 日志 & 本地配置 =====
+server.log
+*.log
+.env
+
+# ===== Node（预留）=====
+node_modules/
